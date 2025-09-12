@@ -115,7 +115,10 @@ class RobotMotionViewer:
         
         self.data.qpos[:3] = root_pos
         self.data.qpos[3:7] = root_rot # quat need to be scalar first! for mujoco
-        self.data.qpos[7:] = dof_pos
+        self.data.qpos[7:22+7] = dof_pos[0:22]
+        self.data.qpos[7+22:7+29] = dof_pos[34:41]
+
+
         
         mj.mj_forward(self.model, self.data)
         
@@ -123,7 +126,7 @@ class RobotMotionViewer:
             self.viewer.cam.lookat = self.data.xpos[self.model.body(self.robot_base).id]
             self.viewer.cam.distance = self.viewer_cam_distance
             self.viewer.cam.elevation = -10  # 正面视角，轻微向下看
-            # self.viewer.cam.azimuth = 180    # 正面朝向机器人
+            self.viewer.cam.azimuth = 180    # 正面朝向机器人
         
         if human_motion_data is not None:
             # Clean custom geometry

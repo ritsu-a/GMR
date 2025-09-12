@@ -1,0 +1,8 @@
+bash scripts/download_csv.sh
+python scripts/vis_csv_motion.py
+
+
+
+
+# single motion
+python scripts/bvh_to_robot.py --bvh_file ~/codebase/playground/ubisoft-laforge-animation-dataset-master/lafan1/lafan1/dance1_subject2.bvh --robot unitree_g1 --save_path ./output --rate_limit
