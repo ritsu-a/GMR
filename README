@@ -1,5 +1,5 @@
-bash scripts/download_csv.sh
-python scripts/vis_csv_motion.py
+ssh root@10.0.0.22 "cd ~/pengyang/codebase/HRI_MLLM && conda activate qwen && CUDA_VISIBLE_DEVICES=0 python HRI_mllm/test/test_gpt2_adaptor.py" && \
+bash scripts/download_csv.sh && python scripts/vis_csv_motion.py
 
 
 
