@@ -115,11 +115,7 @@ class RobotMotionViewer:
         """
         修改后的step函数，使用离屏渲染而不是交互式查看器
         """
-        
-        self.data.qpos[:3] = root_pos
-        self.data.qpos[3:7] = root_rot  # quat need to be scalar first! for mujoco
-        self.data.qpos[7:22+7] = dof_pos[0:22]
-        self.data.qpos[7+22:7+29] = dof_pos[34:41]
+        self.data.qpos = dof_pos
 
         mj.mj_forward(self.model, self.data)
         

@@ -7,6 +7,7 @@ ASSET_ROOT = HERE / ".." / "assets"
 ROBOT_XML_DICT = {
     "unitree_g1": ASSET_ROOT / "unitree_g1" / "g1_mocap_29dof.xml",
     "unitree_g1_with_hands": ASSET_ROOT / "unitree_g1" / "g1_mocap_29dof_with_hands.xml",
+    "unitree_inspire_hands": ASSET_ROOT / "g1_inspirehands" / "G1_inspire_hands.xml",
     "unitree_h1": ASSET_ROOT / "unitree_h1" / "h1.xml",
     "unitree_h1_2": ASSET_ROOT / "unitree_h1_2" / "h1_2_handless.xml",
     "booster_t1": ASSET_ROOT / "booster_t1" / "T1_serial.xml",
@@ -64,6 +65,7 @@ IK_CONFIG_DICT = {
 ROBOT_BASE_DICT = {
     "unitree_g1": "pelvis",
     "unitree_g1_with_hands": "pelvis",
+    "unitree_inspire_hands": "torso_link",
     "unitree_h1": "pelvis",
     "unitree_h1_2": "pelvis",
     "booster_t1": "Waist",
@@ -83,6 +85,7 @@ ROBOT_BASE_DICT = {
 VIEWER_CAM_DISTANCE_DICT = {
     "unitree_g1": 2.0,
     "unitree_g1_with_hands": 2.0,
+    "unitree_inspire_hands": 2.0,
     "unitree_h1": 3.0,
     "unitree_h1_2": 3.0,
     "booster_t1": 2.0,
