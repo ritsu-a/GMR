@@ -1,0 +1,37 @@
+left:
+  type: vector
+  urdf_path: brainco_left_hand.urdf
+  wrist_link_name: "left_hand_base_link"
+
+  # Target refers to the retargeting target, which is the robot hand
+  target_joint_names: ['left_thumb_metacarpal_joint', 'left_thumb_proximal_joint', 'left_index_proximal_joint',
+   'left_middle_proximal_joint', 'left_ring_proximal_joint', 'left_pinky_proximal_joint']
+  target_origin_link_names: [ "left_base_link", "left_base_link", "left_base_link", "left_base_link", "left_base_link"]
+  target_task_link_names: ["left_thumb_tip_Link", "left_index_tip_Link", "left_middle_tip_Link", "left_ring_tip_Link", "left_pinky_tip_Link"]
+  scaling_factor: 1.0
+  
+  # Source refers to the retargeting input, which usually corresponds to the human hand
+  # The joint indices of human hand joint which corresponds to each link in the target_link_names
+  target_link_human_indices: [ [ 0, 0, 0, 0, 0 ], [ 4, 9, 14, 19, 24 ] ]
+
+  # A smaller alpha means stronger filtering, i.e. more smooth but also larger latency
+  low_pass_alpha: 0.5
+
+right:
+  type: vector
+  urdf_path: brainco_right_hand.urdf
+  wrist_link_name: "right_hand_base_link"
+
+  # Target refers to the retargeting target, which is the robot hand
+  target_joint_names: ['right_thumb_metacarpal_joint', 'right_thumb_proximal_joint', 'right_index_proximal_joint',
+    'right_middle_proximal_joint', 'right_ring_proximal_joint', 'right_pinky_proximal_joint']
+  target_origin_link_names: [ "right_base_link", "right_base_link", "right_base_link", "right_base_link", "right_base_link" ]
+  target_task_link_names: ["right_thumb_tip", "right_index_tip", "right_middle_tip", "right_ring_tip", "right_pinky_tip"]
+  scaling_factor: 1.0
+
+  # Source refers to the retargeting input, which usually corresponds to the human hand
+  # The joint indices of human hand joint which corresponds to each link in the target_link_names
+  target_link_human_indices: [ [ 0, 0, 0, 0, 0 ], [ 4, 9, 14, 19, 24 ] ]
+
+  # A smaller alpha means stronger filtering, i.e. more smooth but also larger latency
+  low_pass_alpha: 0.5

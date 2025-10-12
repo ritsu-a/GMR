@@ -49,7 +49,7 @@ def combine_video_with_audio(video_path,audio_path, output_path):
     audio.close()
     final_clip.close()
 
-def vis_audio_motion(audio_path, motion_csv_path, output_path="final_output.mp4", robot_type="unitree_inspire_hands", rate_limit=False):
+def vis_audio_motion(audio_path, motion_csv_path, output_path="final_output.mp4", robot_type="g1_brainco", rate_limit=False):
     motion_csv = np.genfromtxt(motion_csv_path, delimiter=',')
     temp_video_path = motion_csv_path.replace(".csv", f".mp4")
     data_frames = motion_csv.shape[0]
