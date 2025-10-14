@@ -54,7 +54,7 @@ def vis_audio_motion(audio_path, motion_csv_path, output_path="final_output.mp4"
     temp_video_path = motion_csv_path.replace(".csv", f".mp4")
     data_frames = motion_csv.shape[0]
 
-    motion_fps = 50
+    motion_fps = 25
     
     robot_motion_viewer = RobotMotionViewer(robot_type=robot_type,
                                             motion_fps=motion_fps,
