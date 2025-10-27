@@ -8,9 +8,9 @@ from rich import print
 from tqdm import tqdm
 import os
 import numpy as np
+import shutil
 
 from moviepy.editor import VideoFileClip, AudioFileClip, clips_array, CompositeVideoClip
-import os
 
 def combine_video_with_audio(video_path, audio_path, output_path):
     """
@@ -23,12 +23,21 @@ def combine_video_with_audio(video_path, audio_path, output_path):
     """
     # 如果没有音频路径，直接复制视频文件
     if audio_path is None or audio_path == "":
-        import shutil
-        shutil.copy2(video_path, output_path)
+        # 检查源文件路径和目标文件路径是否相同
+        if os.path.abspath(video_path) != os.path.abspath(output_path):
+            shutil.copy2(video_path, output_path)
+        # 如果相同，说明文件已经是最新的了
         return
     
+    # 如果源文件路径和目标文件路径相同，需要先将文件复制到临时位置
+    temp_video = video_path
+    if os.path.abspath(video_path) == os.path.abspath(output_path):
+        # 使用临时文件作为输入
+        temp_video = video_path + ".temp.mp4"
+        shutil.copy2(video_path, temp_video)
+    
     # 加载视频文件
-    final_clip = VideoFileClip(video_path)
+    final_clip = VideoFileClip(temp_video)
 
     # 加载音频文件
     audio = AudioFileClip(audio_path)
@@ -53,6 +62,11 @@ def combine_video_with_audio(video_path, audio_path, output_path):
     # 关闭所有剪辑以释放资源
     audio.close()
     final_clip.close()
+    
+    # 如果使用了临时文件，删除它
+    if temp_video != video_path:
+        if os.path.exists(temp_video):
+            os.remove(temp_video)
 
 def vis_audio_motion(motion_csv_path, output_path="final_output.mp4", audio_path=None, robot_type="g1_brainco", rate_limit=False, motion_fps=25):
     motion_csv = np.genfromtxt(motion_csv_path, delimiter=',')
