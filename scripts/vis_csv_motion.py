@@ -12,17 +12,22 @@ import numpy as np
 from moviepy.editor import VideoFileClip, AudioFileClip, clips_array, CompositeVideoClip
 import os
 
-def combine_video_with_audio(video_path,audio_path, output_path):
+def combine_video_with_audio(video_path, audio_path, output_path):
     """
-    视频添加音频
+    视频添加音频（如果提供了音频路径）
     
     参数:
     video_path: 视频文件路径
-    audio_path: 音频文件路径
+    audio_path: 音频文件路径（可选，为None或空字符串时只复制视频）
     output_path: 输出文件路径
     """
-    # 加载视频文件
+    # 如果没有音频路径，直接复制视频文件
+    if audio_path is None or audio_path == "":
+        import shutil
+        shutil.copy2(video_path, output_path)
+        return
     
+    # 加载视频文件
     final_clip = VideoFileClip(video_path)
 
     # 加载音频文件
@@ -49,7 +54,7 @@ def combine_video_with_audio(video_path,audio_path, output_path):
     audio.close()
     final_clip.close()
 
-def vis_audio_motion(audio_path, motion_csv_path, output_path="final_output.mp4", robot_type="g1_brainco", rate_limit=False, motion_fps=25):
+def vis_audio_motion(motion_csv_path, output_path="final_output.mp4", audio_path=None, robot_type="g1_brainco", rate_limit=False, motion_fps=25):
     motion_csv = np.genfromtxt(motion_csv_path, delimiter=',')
     temp_video_path = motion_csv_path.replace(".csv", f".mp4")
     data_frames = motion_csv.shape[0]
