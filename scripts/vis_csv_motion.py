@@ -114,7 +114,7 @@ def vis_audio_motion(motion_csv_path, output_path="final_output.mp4", audio_path
 
         ## fix lower body motion
         qpos[:7] *= 0
-        qpos[2] += 0.8
+        qpos[2] = 0.8
         qpos[7:7+11] *= 0
 
         # visualize

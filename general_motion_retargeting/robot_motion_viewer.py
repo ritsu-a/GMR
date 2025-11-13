@@ -38,7 +38,12 @@ class RobotMotionViewer:
                 record_video=True,  # 默认开启录制
                 video_path=None,
                 video_width=640,
-                video_height=480):
+                video_height=480,
+                # camera configs
+                camera_elevation=-10,
+                camera_azimuth=180,
+                camera_distance=None,
+                camera_lookat_height_offset=0.0):
         
         self.robot_type = robot_type
         self.xml_path = ROBOT_XML_DICT[robot_type]
@@ -52,6 +57,11 @@ class RobotMotionViewer:
         self.rate_limiter = RateLimiter(frequency=self.motion_fps, warn=False)
         self.camera_follow = camera_follow
         self.record_video = record_video
+        # 相机参数（可覆盖默认字典）
+        self.viewer_cam_distance = self.viewer_cam_distance if camera_distance is None else camera_distance
+        self.camera_elevation = camera_elevation
+        self.camera_azimuth = camera_azimuth
+        self.camera_lookat_height_offset = float(camera_lookat_height_offset)
 
         # 检查是否在有显示的环境下运行
         try:
@@ -84,8 +94,8 @@ class RobotMotionViewer:
         self.camera.fixedcamid = -1
         self.camera.trackbodyid = self.model.body(self.robot_base).id
         self.camera.distance = self.viewer_cam_distance
-        self.camera.elevation = -10
-        self.camera.azimuth = 180
+        self.camera.elevation = self.camera_elevation
+        self.camera.azimuth = self.camera_azimuth
         
         # 初始化场景和上下文
         self.scene = mj.MjvScene(self.model, maxgeom=10000)
@@ -121,10 +131,12 @@ class RobotMotionViewer:
         
         if follow_camera:
             # 更新相机位置
-            self.camera.lookat = self.data.xpos[self.model.body(self.robot_base).id]
+            self.camera.lookat = self.data.xpos[self.model.body(self.robot_base).id].copy()
+            # 抬高视点
+            self.camera.lookat[2] += self.camera_lookat_height_offset
             self.camera.distance = self.viewer_cam_distance
-            self.camera.elevation = -10
-            self.camera.azimuth = 180
+            self.camera.elevation = self.camera_elevation
+            self.camera.azimuth = self.camera_azimuth
         
         # 渲染场景
         mj.mjv_updateScene(self.model, self.data, mj.MjvOption(), mj.MjvPerturb(), 
