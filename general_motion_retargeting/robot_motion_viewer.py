@@ -82,7 +82,6 @@ class RobotMotionViewer:
         except Exception as e:
             print(f"无显示环境检测: {e}")
             self.has_display = False
-            # 设置环境变量以使用离屏渲染
             os.environ['MUJOCO_GL'] = 'egl'  # 或者 'egl'
 
         # 初始化渲染器
@@ -104,6 +103,12 @@ class RobotMotionViewer:
         if self.record_video:
             assert video_path is not None, "Please provide video path for recording"
             self.video_path = video_path
+            
+            # 确保输出目录存在
+            video_dir = os.path.dirname(os.path.abspath(self.video_path))
+            if video_dir and not os.path.exists(video_dir):
+                os.makedirs(video_dir, exist_ok=True)
+                print(f"Created video output directory: {video_dir}")
 
             self.mp4_writer = imageio.get_writer(self.video_path, fps=self.motion_fps)
             print(f"Recording video to {self.video_path}")
@@ -125,7 +130,9 @@ class RobotMotionViewer:
         """
         修改后的step函数，使用离屏渲染而不是交互式查看器
         """
-        self.data.qpos = dof_pos
+        self.data.qpos[:3] = root_pos
+        self.data.qpos[3:7] = root_rot
+        self.data.qpos[7:] = dof_pos
 
         mj.mj_forward(self.model, self.data)
         
@@ -154,5 +161,14 @@ class RobotMotionViewer:
     
     def close(self):
         if self.record_video:
-            self.mp4_writer.close()
-            print(f"Video saved to {self.video_path}")
+            if hasattr(self, 'mp4_writer') and self.mp4_writer is not None:
+                self.mp4_writer.close()
+                print(f"Video saved to {self.video_path}")
+        
+        # 正确关闭renderer以清理EGL上下文
+        if hasattr(self, 'renderer') and self.renderer is not None:
+            try:
+                # MuJoCo的Renderer在Python中会自动清理，但我们可以显式删除引用
+                del self.renderer
+            except Exception as e:
+                print(f"清理renderer时出现警告: {e}")
