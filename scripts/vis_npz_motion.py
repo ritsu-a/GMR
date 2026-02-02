@@ -4,7 +4,6 @@ os.environ["MUJOCO_GL"] = "egl"
 import argparse
 import pathlib
 import time
-from general_motion_retargeting import GeneralMotionRetargeting as GMR
 from general_motion_retargeting import RobotMotionViewer
 from general_motion_retargeting.utils.lafan1 import load_lafan1_file
 from rich import print
@@ -12,17 +11,10 @@ from tqdm import tqdm
 
 
 import numpy as np
-import pickle
-import shutil
-import joblib
-import torch
-from diff_quat import vec6d_to_quat
-
-from scipy import signal
 
 
 
-def vis_npz_motion(motion_npz_path, output_path="final_output.mp4", robot_type="unitree_g1", rate_limit=False, motion_fps=30):
+def vis_npz_motion(motion_npz_path, output_path="final_output.mp4", robot_type="g1_branco", rate_limit=False, motion_fps=30):
 
     
     motion_csv = np.load(motion_npz_path)['qpos']
@@ -119,8 +111,8 @@ if __name__ == "__main__":
     
     parser.add_argument(
         "--robot",
-        choices=["unitree_g1", "unitree_g1_with_hands", "booster_t1", "stanford_toddy", "fourier_n1", "engineai_pm01"],
-        default="unitree_g1",
+        choices=["unitree_g1", "unitree_g1_with_hands", "booster_t1", "stanford_toddy", "fourier_n1", "engineai_pm01", "g1_brainco"],
+        default="g1_brainco",
     )
         
 
@@ -139,7 +131,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--motion_fps",
         type=int,
-        default=30,
+        default=60,
     )
 
     parser.add_argument(
